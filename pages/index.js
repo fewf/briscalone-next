@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import { table, minifyRecords } from './api/utils/airtable';
-import Todo from '../compenents/Todo';
+import Todo from '../components/Todo';
 import { useEffect, useContext } from 'react';
 import { TodosContext } from '../contexts/TodosContext';
-import TodoForm from '../compenents/TodoForm';
+import TodoForm from '../components/TodoForm';
 import auth0 from './api/utils/auth0';
 
 export default function Home({ initialTodos, user }) {
