@@ -1,22 +1,23 @@
 import { createContext, useState } from 'react';
 
-const TodosContext = createContext();
+const GameContext = createContext();
 
-const TodosProvider = ({ children }) => {
-    const [todos, setTodos] = useState([]);
+const GameProvider = ({ children }) => {
+    const [game, setGame] = useState({});
 
-    const refreshTodos = async () => {
+    const refreshGame = async () => {
         try {
-            const res = await fetch('/api/getTodos');
-            const latestTodos = await res.json();
-            setTodos(latestTodos);
+            const res = await fetch('/api/getGame');
+            const game = await res.json();
+            setTodos(game);
         } catch (err) {
             console.error(err);
         }
     };
 
-    const addTodo = async (todo) => {
+    const playBid = async (bid) => {
         try {
+            game
             const res = await fetch('/api/createTodo', {
                 method: 'POST',
                 body: JSON.stringify({ description: todo }),
@@ -87,4 +88,4 @@ const TodosProvider = ({ children }) => {
     );
 };
 
-export { TodosProvider, TodosContext };
+export { GameProvider, GameContext };
