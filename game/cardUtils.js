@@ -15,7 +15,7 @@ function getRank(cardNum) {
   return cardNum % 10;
 }
 
-module.exports = {
+export default {
   getPoints,
   getPointsForCards,
   getSuit,

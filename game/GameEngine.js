@@ -1,10 +1,8 @@
-"use strict";
-
-const { getPointsForCards, getSuit } = require("./cardUtils");
-const shuffle = require("lodash/shuffle");
-const flatten = require("lodash/flatten");
-const dropRightWhile = require("lodash/dropRightWhile");
-const range = require("lodash/range");
+import { getPointsForCards, getSuit } from "./cardUtils";
+import shuffle from "lodash/shuffle";
+import flatten from "lodash/flatten";
+import dropRightWhile from "lodash/dropRightWhile";
+import range from "lodash/range";
 
 const PASS_BID = "P";
 const POINT_BID = "Y";
@@ -12,7 +10,7 @@ const BID = "bid";
 const THROW = "throw";
 const MONKEY = "monkey";
 
-module.exports = (rounds = []) => ({
+export const generateGame = (rounds = []) => ({
   rounds,
   initializeRound(roundData) {
     this.rounds.push({
