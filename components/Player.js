@@ -10,7 +10,7 @@ import {
   MIDDLE_TABLE_TABLE_COLUMN_WIDTH
 } from "../constants/LAYOUT";
 import { rankOrder, suitOrder } from "../constants/CARDS";
-import { getRank, getSuit } from "../../game/cardUtils";
+import { getRank, getSuit } from "../game/cardUtils";
 
 class Player extends Component {
   render() {

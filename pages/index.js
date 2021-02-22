@@ -1,4 +1,4 @@
-import { table } from './api/utils/airtable';
+import { getMinifiedRecord, table } from './api/utils/airtable';
 import { useEffect, useContext } from 'react';
 import { GameContext } from '../contexts/GameContext';
 import auth0 from './api/utils/auth0';
@@ -13,7 +13,7 @@ import GameInfo from "../components/GameInfo";
 export default function Home({ initialGame, user }) {
   const { game, setGame } = useContext(GameContext);
   useEffect(() => {
-    setGame(game);
+    setGame(initialGame);
   }, []);
   const brisca = game && generateGame(game.gameJson);
   if (!user) {
@@ -39,8 +39,7 @@ export default function Home({ initialGame, user }) {
   } else if (!brisca?.rounds.length) {
     return (
       <div style={{ position: "relative" }}>
-        <h1>Hi {username}, we're waiting for more players</h1>
-        {chat}
+        <h1>Hi {user.sub}, we're waiting for more players</h1>
       </div>
     );
   }
@@ -105,16 +104,41 @@ export default function Home({ initialGame, user }) {
 export async function getServerSideProps(context) {
   const session = await auth0.getSession(context.req);
 
-  let todos = [];
+  let game = null;
   if (session?.user) {
-    console.log(session.user)
-    game = await table
+    game = (await table
       .select({ filterByFormula: `OR(user1Id = '${session.user.sub}',user2Id = '${session.user.sub}',user3Id = '${session.user.sub}',user4Id = '${session.user.sub}',user5Id = '${session.user.sub}')` })
-      .firstPage();
+      .firstPage())[0];
+
+    if (!game) {
+      const gameToJoin = (await table
+        .select({ filterByFormula: `OR(NOT(user1Id),NOT(user2Id),NOT(user3Id),NOT(user4Id),NOT(user5Id))` })
+        .firstPage())[0];
+      if (gameToJoin) {
+        for (let index = 1; index < 6; index++) {
+          if (!gameToJoin.fields[`user${index}Id`]) {
+            game = (await table.update([{
+              id: gameToJoin.id,
+              fields: { ...gameToJoin.fields, [`user${index}Id`]: session.user.sub }
+            }]))[0];
+            break;
+          }
+        }
+      } else {
+        const brisca = generateGame();
+        brisca.initializeRound();
+        game = await table.create([{
+          fields: {
+            gameJson: JSON.stringify(brisca.rounds),
+            user1Id: session.user.sub
+          }
+        },])[0];
+      }
+    }
   }
   return {
     props: {
-      initialGame: game[0] || null,
+      initialGame: (game && getMinifiedRecord(game)) || null,
       user: session?.user || null,
     },
   };

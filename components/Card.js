@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getSuit } from "../../game/cardUtils";
+import { getSuit } from "../game/cardUtils";
 const cardGlyphs = [
   "🃂",
   "🃃",
