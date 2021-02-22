@@ -10,7 +10,7 @@ import {
 
 class Score extends Component {
   render() {
-    const { gameScore, roundScores, usernames } = this.props;
+    const { gameScore, roundScores, users } = this.props;
     const divStyle = { display: "inline-block", minWidth: "20%" };
     return (
       <div
@@ -27,7 +27,7 @@ class Score extends Component {
       >
         {range(5).map(index => (
           <div key={index} style={divStyle}>
-            {usernames[index] || `Player ${index + 1}`}
+            {users[index] || `Player ${index + 1}`}
           </div>
         ))}
         <div>

@@ -27,14 +27,14 @@ class Player extends Component {
       playerPointsTaken,
       ws,
       seatIndex,
-      usernames
+      users
     } = this.props;
     const isCurrentPlayer = playerIndex === handIndex;
     const isSeatedPlayer = seatIndex === handIndex;
     const offset = (handIndex + 5 - seatIndex) % 5;
     const isTopPlayer = offset === 2 || offset === 3;
     const isMiddlePlayer = !isTopPlayer && !isSeatedPlayer;
-    const playerName = usernames[handIndex] || `Player ${handIndex + 1}`;
+    const playerName = users[handIndex] || `Player ${handIndex + 1}`;
     return (
       <div
         key={handIndex}

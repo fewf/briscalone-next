@@ -1,7 +1,11 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
 
 body {
-    @apply bg-gray-300;
+  font-family: "Helvetica Neue", helvetica, arial;
+  background-color:white;
+  color: black;
+  font-size: 24pt;
 }

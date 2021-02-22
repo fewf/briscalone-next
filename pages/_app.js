@@ -5,9 +5,9 @@ import '../styles/index.css';
 function MyApp({ Component, pageProps }) {
   return (
     <GameProvider>
-      <div className="container mx-auto my-6">
+      {/* <div className="container mx-auto my-6"> */}
         <Component {...pageProps} />
-      </div>
+      {/* </div> */}
     </GameProvider>
   );
 }

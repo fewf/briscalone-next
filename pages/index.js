@@ -9,13 +9,13 @@ import Trick from "../components/Trick";
 import Player from "../components/Player";
 import Score from "../components/Score";
 import GameInfo from "../components/GameInfo";
+import Chat from '../components/Chat';
 
 export default function Home({ initialGame, user }) {
   const { game, setGame } = useContext(GameContext);
   useEffect(() => {
     setGame(initialGame);
   }, []);
-  const brisca = game && generateGame(game.gameJson);
   if (!user) {
     return (
       <div className="flex">
@@ -36,19 +36,26 @@ export default function Home({ initialGame, user }) {
         )}
       </div>
     );
-  } else if (!brisca?.rounds.length) {
+  }
+  if (!game) {
+    return null;
+  }
+  console.log(game);
+  const users = [game.fields.user1Id, game.fields.user2Id, game.fields.user3Id, game.fields.user4Id, game.fields.user5Id];
+  console.log(users)
+  if (users.filter(x => !x).length) {
     return (
       <div style={{ position: "relative" }}>
         <h1>Hi {user.sub}, we're waiting for more players</h1>
       </div>
     );
   }
-  const users = [game.user1Id, game.user2Id, game.user3Id, game.user4Id, game.user5Id];
-  const seatIndex = user.indexOf(user.sub);
+  const brisca = generateGame(JSON.parse(game.fields.gameJson));
+  const seatIndex = users.indexOf(user.sub);
   const round = brisca.loadRound();
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
-      <div>
+      <>
         {round.playerHands &&
           round.playerHands.map((playerHand, handIndex) => (
             <Player
@@ -66,7 +73,7 @@ export default function Home({ initialGame, user }) {
               users={users}
             />
           ))}
-      </div>
+      </>
       <Table seatIndex={seatIndex} bidderIndex={round.bidderIndex}>
         {round.bidIsFinal ? (
           <Trick
@@ -96,6 +103,9 @@ export default function Home({ initialGame, user }) {
         gameScore={brisca.gameScore}
         roundScores={brisca.roundScores}
         users={users}
+      />
+      <Chat
+
       />
     </div>
   );
