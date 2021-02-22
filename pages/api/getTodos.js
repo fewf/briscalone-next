@@ -1,4 +1,4 @@
-import { table, getMinifiedRecord, minifyRecords } from './utils/airtable.js';
+import { table, getMinifiedRecord } from './utils/airtable.js';
 import auth0 from './utils/auth0';
 
 export default auth0.requireAuthentication(async (req, res) => {
@@ -8,7 +8,7 @@ export default auth0.requireAuthentication(async (req, res) => {
         const records = await table
             .select({ filterByFormula: `user1Id = '${user.sub}' | user2Id = '${user.sub}' | user3Id = '${user.sub}' | user4Id = '${user.sub}' | user5Id = '${user.sub}'` })
             .firstPage();
-        const formattedRecords = minifyRecords(records);
+        const formattedRecords = records;
         res.statusCode = 200;
         res.json(formattedRecords);
     } catch (error) {
