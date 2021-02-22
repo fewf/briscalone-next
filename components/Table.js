@@ -10,15 +10,7 @@ class Table extends Component {
   render() {
     const { bidderIndex, children, round, seatIndex } = this.props;
     return (
-      <div
-        style={{
-          position: "relative",
-          left: `${MIDDLE_TABLE_PLAYER_COLUMN_WIDTH}%`,
-          top: `${TOP_TABLE_ROW_HEIGHT}%`,
-          width: `${MIDDLE_TABLE_TABLE_COLUMN_WIDTH}%`,
-          height: `${MIDDLE_TABLE_HEIGHT}%`
-        }}
-      >
+      <div className="col-start-4 col-end-10 row-start-2 row-end-4">
         {children}
       </div>
     );

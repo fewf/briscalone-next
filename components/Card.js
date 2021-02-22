@@ -62,9 +62,8 @@ class Card extends React.Component {
       <span className={className} onClick={onClick} style={{ color: getSuit(card) % 2 ? 'black' : 'red' }}>
         {/* {cardGlyphs[card]} */}
         <img
-
-          width="80"
-          style={style}
+          width="72"
+          height="92"
           src={card2fileName(card)}
           alt={num2Card(card).join(" of ")}
         />

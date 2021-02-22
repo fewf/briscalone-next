@@ -11,17 +11,7 @@ class GameInfo extends Component {
   render() {
     const { bidIsFinal, bidRank, monkeySuit, roundNumber } = this.props;
     return (
-      <div
-        style={{
-          height: `${ROUND_INFO_HEIGHT}%`,
-          top: `${TOP_TABLE_ROW_HEIGHT +
-            MIDDLE_TABLE_HEIGHT +
-            BOTTOM_TABLE_HEIGHT}%`,
-          position: "absolute",
-          width: "100%",
-          overflow: "scroll"
-        }}
-      >
+      <div className="col-start-1 col-end-4 row-start-4 row-end-5">
         <p>
           ROUND: {roundNumber}
           {bidIsFinal ? ` • WINNING BID: ${rankOrder[bidRank]}` : null}

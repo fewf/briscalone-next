@@ -13,21 +13,10 @@ class Score extends Component {
     const { gameScore, roundScores, users } = this.props;
     const divStyle = { display: "inline-block", minWidth: "20%" };
     return (
-      <div
-        style={{
-          height: `${GAME_SCORES_HEIGHT}%`,
-          top: `${TOP_TABLE_ROW_HEIGHT +
-            MIDDLE_TABLE_HEIGHT +
-            BOTTOM_TABLE_HEIGHT +
-            ROUND_INFO_HEIGHT}%`,
-          position: "absolute",
-          width: "100%",
-          overflow: "scroll"
-        }}
-      >
+      <div className="col-start-1 col-end-4 row-start-5 row-end-7">
         {range(5).map(index => (
           <div key={index} style={divStyle}>
-            {users[index] || `Player ${index + 1}`}
+            P{index + 1}
           </div>
         ))}
         <div>

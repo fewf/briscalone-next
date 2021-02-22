@@ -54,7 +54,7 @@ export default function Home({ initialGame, user }) {
   const seatIndex = users.indexOf(user.sub);
   const round = brisca.loadRound();
   return (
-    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+    <div className="grid grid-cols-12 grid-rows-6 h-screen">
       <>
         {round.playerHands &&
           round.playerHands.map((playerHand, handIndex) => (
@@ -103,9 +103,6 @@ export default function Home({ initialGame, user }) {
         gameScore={brisca.gameScore}
         roundScores={brisca.roundScores}
         users={users}
-      />
-      <Chat
-
       />
     </div>
   );

@@ -30,17 +30,7 @@ class Trick extends Component {
           return (
             <Card
               key={index}
-              card={playerCard}
-              style={{
-                position: "absolute",
-                top: TABLE_TOP_OFFSETS[offset],
-                bottom: TABLE_BOTTOM_OFFSETS[offset],
-                left: TABLE_LEFT_OFFSETS[offset],
-                right: TABLE_RIGHT_OFFSETS[offset],
-                transform: `rotate(${TABLE_ROTATE_OFFSETS[offset]}deg)`,
-                height: "40%"
-              }}
-            />
+              card={playerCard}/>
           );
         })}
       </div>
