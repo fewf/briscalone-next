@@ -19,7 +19,7 @@ export default function Home({ initialGame, user }) {
     if (window) {
       interval = setInterval(async () => {
         setGame(await (await fetch('/api/getGame')).json());
-      }, 30000);
+      }, 5000);
     }
     setGame(initialGame);
     return () => clearInterval(interval);
