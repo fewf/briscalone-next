@@ -1,81 +1,64 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 const GameContext = createContext();
 
 const GameProvider = ({ children }) => {
-  const [game, setGame] = useState(null);
-  // const refreshGame = async () => {
-  //   try {
-  //     const res = await fetch('/api/getGame');
-  //     const game = await res.json();
-  //     setTodos(game);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+  const [game, setGame] = useState(false);
 
-  // const playBid = async (bid) => {
-  //   try {
-  //     game
-  //     const res = await fetch('/api/createTodo', {
-  //       method: 'POST',
-  //       body: JSON.stringify({ description: todo }),
-  //       headers: { 'Content-Type': 'application/json' },
-  //     });
-  //     const newTodo = await res.json();
-  //     setTodos((prevTodos) => {
-  //       const updatedTodos = [newTodo, ...prevTodos];
-  //       return updatedTodos;
-  //     });
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+  const playBid = async (bid) => {
+    try {
+      const res = await fetch('/api/bid', {
+        method: 'POST',
+        body: JSON.stringify({ bid }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const updatedGame = await res.json();
+      if (updatedGame.err) return;
+      setGame(updatedGame);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  // const updateTodo = async (updatedTodo) => {
-  //   try {
-  //     await fetch('/api/updateTodo', {
-  //       method: 'PUT',
-  //       body: JSON.stringify(updatedTodo),
-  //       headers: {
-  //         'content-type': 'application/json',
-  //       },
-  //     });
+  const playMonkey = async (monkey) => {
+    try {
+      const res = await fetch('/api/monkey', {
+        method: 'POST',
+        body: JSON.stringify({ monkey }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const updatedGame = await res.json();
+      if (updatedGame.err) return;
+      setGame(updatedGame);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  //     setTodos((prevTodos) => {
-  //       const existingTodos = [...prevTodos];
-  //       const existingTodo = existingTodos.find(
-  //         (todo) => todo.id === updatedTodo.id
-  //       );
-  //       existingTodo.fields = updatedTodo.fields;
-  //       return existingTodos;
-  //     });
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // const deleteTodo = async (id) => {
-  //   try {
-  //     await fetch('/api/deleteTodo', {
-  //       method: 'Delete',
-  //       body: JSON.stringify({ id }),
-  //       headers: { 'Content-Type': 'application/json' },
-  //     });
-
-  //     setTodos((prevTodos) => {
-  //       return prevTodos.filter((todo) => todo.id !== id);
-  //     });
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+  const playCard = async (card) => {
+    try {
+      const res = await fetch('/api/throw', {
+        method: 'POST',
+        body: JSON.stringify({ card }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      console.log('hullo')
+      const updatedGame = await res.json();
+      if (updatedGame.err) return;
+      setGame(updatedGame);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <GameContext.Provider
       value={{
         game,
-        setGame
+        setGame,
+        playBid,
+        playMonkey,
+        playCard,
       }}
     >
       {children}

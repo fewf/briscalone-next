@@ -9,6 +9,7 @@ import {
 class Table extends Component {
   render() {
     const { bidderIndex, children, round, seatIndex } = this.props;
+    return children;
     return (
       <div className="col-start-4 col-end-10 row-start-2 row-end-4">
         {children}

@@ -6,10 +6,10 @@ const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
 const table = base(process.env.AIRTABLE_TABLE_NAME);
 
 const getMinifiedRecord = (record) => {
-  return {
+  return record && {
     id: record.id,
     fields: record.fields,
-  };
+  } || null;
 };
 
 export { table, getMinifiedRecord };

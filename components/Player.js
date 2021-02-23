@@ -25,7 +25,9 @@ class Player extends Component {
       playerIndex,
       playerTricks,
       playerPointsTaken,
-      ws,
+      playBid,
+      playMonkey,
+      playCard,
       seatIndex,
       users
     } = this.props;
@@ -63,11 +65,7 @@ class Player extends Component {
                   style={{ width: "12%" }}
                   card={card}
                   className="handCard inline-block"
-                  onClick={() =>
-                    ws.send(
-                      JSON.stringify({ messageType: "throw", message: card })
-                    )
-                  }
+                  onClick={() => playCard(card)}
                 />
               ))}
             </div>
@@ -76,18 +74,14 @@ class Player extends Component {
               <div>
                 <button
                   style={{ margin: 10, fontSize: 24 }}
-                  onClick={() =>
-                    ws.send(JSON.stringify({ messageType: "bid", message: "P" }))
-                  }
+                  onClick={() => playBid('P')}
                 >
                   Pass
                 </button>
                 {bidRank === 0 ? (
                   <button
                     style={{ margin: 10, fontSize: 24 }}
-                    onClick={() =>
-                      ws.send(JSON.stringify({ messageType: "bid", message: "Y" }))
-                    }
+                    onClick={() => playBid('Y')}
                   >
                     2 and {bidPoints + 2} points
                   </button>
@@ -99,11 +93,7 @@ class Player extends Component {
                         style={{ margin: 10, fontSize: 24 }}
                         key={i}
                         disabled={false}
-                        onClick={() =>
-                          ws.send(
-                            JSON.stringify({ messageType: "bid", message: i })
-                          )
-                        }
+                        onClick={() => playBid(i)}
                       >
                         {rank}
                       </button>
@@ -120,9 +110,7 @@ class Player extends Component {
                     color: i % 1 ? "red" : "black",
                     fontSize: 30
                   }}
-                  onClick={() =>
-                    ws.send(JSON.stringify({ messageType: "monkey", message: i }))
-                  }
+                  onClick={() => playMonkey(i)}
                 >
                   {suit}
                 </button>

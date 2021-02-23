@@ -19,7 +19,7 @@ class Trick extends Component {
       bidPoints
     } = this.props;
     return (
-      <div>
+      <>
         {range(5).map(index => {
           const offset = (index + 5 - seatIndex) % 5;
           const playerCard =
@@ -28,12 +28,20 @@ class Trick extends Component {
               .filter((ba, i) => (i + trickFirstPlayerIndex) % 5 === index)
               .pop();
           return (
-            <Card
-              key={index}
-              card={playerCard}/>
+            <div className={[
+              'col-start-6 row-start-3',
+              'col-start-4 row-start-3',
+              'col-start-5 row-start-2',
+              'col-start-7 row-start-2',
+              'col-start-9 row-start-3',
+            ][index]}>
+              <Card
+                key={index}
+                card={playerCard}/>
+            </div>
           );
         })}
-      </div>
+      </>
     );
   }
 }

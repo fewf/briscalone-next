@@ -9,13 +9,23 @@ import Trick from "../components/Trick";
 import Player from "../components/Player";
 import Score from "../components/Score";
 import GameInfo from "../components/GameInfo";
-import Chat from '../components/Chat';
+// import { getUserGame } from './api/getGame';
+// import useInterval from '@use-it/interval';
 
 export default function Home({ initialGame, user }) {
-  const { game, setGame } = useContext(GameContext);
+  const { game, setGame, playCard, playBid, playMonkey } = useContext(GameContext);
   useEffect(() => {
+    let interval;
+    if (window) {
+      interval = setInterval(async () => {
+        setGame(await (await fetch('/api/getGame')).json());
+      }, 30000);
+    }
     setGame(initialGame);
+    return () => clearInterval(interval);
   }, []);
+
+
   if (!user) {
     return (
       <div className="flex">
@@ -71,6 +81,9 @@ export default function Home({ initialGame, user }) {
               playerPointsTaken={round.playerPointsTaken(handIndex)}
               seatIndex={seatIndex}
               users={users}
+              playBid={playBid}
+              playMonkey={playMonkey}
+              playCard={playCard}
             />
           ))}
       </>
