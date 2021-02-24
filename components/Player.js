@@ -40,12 +40,12 @@ class Player extends Component {
     return (
       <>
         <div className={`${[
-          'col-start-4 col-end-7 row-start-4 row-end-7',
-          'col-start-1 col-end-4 row-start-3 row-end-4',
-          'col-start-4 col-end-7 row-start-1 row-end-2',
-          'col-start-7 col-end-10 row-start-1 row-end-2',
-          'col-start-10 col-end-13 row-start-3 row-end-4',
-        ][offset]}`}>
+          'col-start-1 col-end-2 row-start-6 row-end-7 md:col-start-4 md:col-end-7 md:row-start-4 md:row-end-7',
+          'col-start-1 col-end-2 row-start-4 row-end-5 md:col-start-1 md:col-end-4 md:row-start-3 md:row-end-4',
+          'col-start-1 col-end-2 row-start-1 row-end-2 md:col-start-4 md:col-end-7 md:row-start-1 md:row-end-2',
+          'col-start-2 col-end-3 row-start-1 row-end-2 md:col-start-7 md:col-end-10 md:row-start-1 md:row-end-2',
+          'col-start-2 col-end-3 row-start-4 row-end-5 md:col-start-10 md:col-end-13 md:row-start-3 md:row-end-4',
+        ][offset]} ${[3,4].indexOf(offset) !== -1 && 'text-right'}`}>
           <p>
             {playerName}
             {handIndex === bidderIndex ? (
@@ -57,7 +57,7 @@ class Player extends Component {
           </p>
         </div>
         {isSeatedPlayer ? (
-          <div className="col-start-7 col-end-13 row-start-4 row-end-7">
+          <div className="col-start-1 col-end-3 row-start-5 row-end-6 md:col-start-7 md:col-end-13 md:row-start-4 md:row-end-7">
             <div>
               {sortBy(playerHand, [getSuit, getRank]).map(card => (
                 <Card

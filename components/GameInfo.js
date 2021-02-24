@@ -11,7 +11,7 @@ class GameInfo extends Component {
   render() {
     const { bidIsFinal, bidRank, monkeySuit, roundNumber, round } = this.props;
     return (
-      <div className="col-start-1 col-end-4 row-start-4 row-end-5">
+      <div className="col-start-2 col-end-3 row-start-6 row-end-7 md:col-start-1 md:col-end-4 md:row-start-4 md:row-end-5">
         <p>
           ROUND: {roundNumber}
           {bidIsFinal ? ` • WINNING BID: ${rankOrder[bidRank]}` : null}

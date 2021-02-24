@@ -19,7 +19,7 @@ class Trick extends Component {
       bidPoints
     } = this.props;
     return (
-      <div className="col-start-4 col-end-10 row-start-2 row-end-4">
+      <div className="col-start-1 col-end-3 row-start-2 row-end-4 md:col-start-4 md:col-end-10 md:row-start-2 md:row-end-4">
         {/* {range(5).map(index => {
           const offset = (index + 5 - seatIndex) % 5;
           const playerCard =
@@ -31,11 +31,11 @@ class Trick extends Component {
             <div
               key={index}
               className={[
-                'col-start-6 row-start-3',
-                'col-start-5 row-start-3',
-                'col-start-5 row-start-2',
-                'col-start-7 row-start-2',
-                'col-start-7 row-start-3',
+                'md:col-start-6 md:row-start-3',
+                'md:col-start-5 md:row-start-3',
+                'md:col-start-5 md:row-start-2',
+                'md:col-start-7 md:row-start-2',
+                'md:col-start-7 md:row-start-3',
               ][offset]
             }>
               <Card

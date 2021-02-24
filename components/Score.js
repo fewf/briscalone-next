@@ -13,7 +13,7 @@ class Score extends Component {
     const { gameScore, roundScores, users } = this.props;
     const divStyle = { display: "inline-block", minWidth: "20%" };
     return (
-      <div className="col-start-1 col-end-4 row-start-5 row-end-7">
+      <div className="col-start-1 col-end-3 row-start-7 row-end-8 md:col-start-1 md:col-end-4 md:row-start-5 md:row-end-7">
         {range(5).map(index => (
           <div key={index} style={divStyle}>
             P{index + 1}

@@ -64,7 +64,7 @@ export default function Home({ initialGame, user }) {
   const seatIndex = users.indexOf(user.sub);
   const round = brisca.loadRound();
   return (
-    <div className="grid grid-cols-12 grid-rows-6 h-screen">
+    <div className="grid grid-cols-2 grid-rows-8 md:grid-cols-12 md:grid-rows-6 h-screen">
       <>
         {round.playerHands &&
           round.playerHands.map((playerHand, handIndex) => (
