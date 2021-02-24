@@ -56,14 +56,17 @@ const card2fileName = num => `https://www.random.org/playing-cards/${
 
 class Card extends React.Component {
   render() {
-    const { card, style, onClick, className } = this.props;
+    const { card, cardStyle, style, onClick, className, svgAttrs, width = 72 } = this.props;
     if (isNaN(card)) return null;
-    return (
-      <span className={className} onClick={onClick} style={{ color: getSuit(card) % 2 ? 'black' : 'red' }}>
+    return svgAttrs ? (
+      <image href={card2fileName(card)} alt={num2Card(card).join(" of ")} {...svgAttrs} />
+    ) : (
+      <span className={className} onClick={onClick} style={style}>
         {/* {cardGlyphs[card]} */}
         <img
-          width="72"
-          height="92"
+          style={cardStyle}
+          width={width}
+          height={width * (18/23)}
           src={card2fileName(card)}
           alt={num2Card(card).join(" of ")}
         />

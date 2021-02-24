@@ -9,13 +9,14 @@ import { rankOrder, suitOrder } from "../constants/CARDS";
 
 class GameInfo extends Component {
   render() {
-    const { bidIsFinal, bidRank, monkeySuit, roundNumber } = this.props;
+    const { bidIsFinal, bidRank, monkeySuit, roundNumber, round } = this.props;
     return (
       <div className="col-start-1 col-end-4 row-start-4 row-end-5">
         <p>
           ROUND: {roundNumber}
           {bidIsFinal ? ` • WINNING BID: ${rankOrder[bidRank]}` : null}
           {monkeySuit ? ` • MONKEY SUIT: ${suitOrder[monkeySuit]}` : null}
+          {round.trickCards.length && !round.trick.length && `Player ${round.resolveTrickWinner(round.previousTrick) + 1} takes the trick`}
         </p>
       </div>
     );

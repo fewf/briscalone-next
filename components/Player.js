@@ -41,10 +41,10 @@ class Player extends Component {
       <>
         <div className={`${[
           'col-start-4 col-end-7 row-start-4 row-end-7',
-          'col-start-1 col-end-4 row-start-2 row-end-4',
+          'col-start-1 col-end-4 row-start-3 row-end-4',
           'col-start-4 col-end-7 row-start-1 row-end-2',
           'col-start-7 col-end-10 row-start-1 row-end-2',
-          'col-start-10 col-end-13 row-start-2 row-end-4',
+          'col-start-10 col-end-13 row-start-3 row-end-4',
         ][offset]}`}>
           <p>
             {playerName}

@@ -15,14 +15,14 @@ import GameInfo from "../components/GameInfo";
 export default function Home({ initialGame, user }) {
   const { game, setGame, playCard, playBid, playMonkey } = useContext(GameContext);
   useEffect(() => {
-    let interval;
-    if (window) {
-      interval = setInterval(async () => {
-        setGame(await (await fetch('/api/getGame')).json());
-      }, 5000);
-    }
+    // let interval;
+    // if (window) {
+    //   interval = setInterval(async () => {
+    //     setGame(await (await fetch('/api/getGame')).json());
+    //   }, 5000);
+    // }
     setGame(initialGame);
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []);
 
 
@@ -92,7 +92,7 @@ export default function Home({ initialGame, user }) {
           <Trick
             bidderIndex={round.bidderIndex}
             bidPoints={round.bidPoints}
-            trick={round.trick}
+            trick={!round.trickCards.length || round.trick.length ? round.trick : round.previousTrick}
             trickFirstPlayerIndex={round.trickFirstPlayerIndex}
             seatIndex={seatIndex}
           />
@@ -111,6 +111,7 @@ export default function Home({ initialGame, user }) {
         bidRank={round.bidRank}
         monkeySuit={round.monkeySuit}
         roundNumber={brisca.rounds.length}
+        round={round}
       />
       <Score
         gameScore={brisca.gameScore}
