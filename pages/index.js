@@ -16,14 +16,14 @@ import GameInfo from "../components/GameInfo";
 export default function Home({ initialGame, user }) {
   const { game, setGame, playCard, playBid, playMonkey, setName } = useContext(GameContext);
   useEffect(() => {
-    // let interval;
-    // if (window) {
-    //   interval = setInterval(async () => {
-    //     setGame(await (await fetch('/api/getGame')).json());
-    //   }, 5000);
-    // }
+    let interval;
+    if (window) {
+      interval = setInterval(async () => {
+        setGame(await (await fetch('/api/getGame')).json());
+      }, 3000);
+    }
     setGame(initialGame);
-    // return () => clearInterval(interval);
+    return () => clearInterval(interval);
   }, []);
 
 
