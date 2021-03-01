@@ -19,36 +19,33 @@ class Bids extends Component {
       bidPoints
     } = this.props;
     return (
-      <div>
+      <svg style={{height: "100%"}} className="mx-auto"
+        xmlns="http://www.w3.org/2000/svg">
         {range(5).map(index => {
           const offset = (index + 5 - seatIndex) % 5;
           const playerLastBid = bidActions
             .filter((ba, i) => (i + roundFirstPlayerIndex) % 5 === index)
             .pop();
           return (
-            <span
-              key={index}
-              style={{
-                position: "absolute",
-                top: TABLE_TOP_OFFSETS[offset],
-                bottom: TABLE_BOTTOM_OFFSETS[offset],
-                left: TABLE_LEFT_OFFSETS[offset],
-                right: TABLE_RIGHT_OFFSETS[offset],
-                transform: `rotate(${TABLE_ROTATE_OFFSETS[offset]}deg)`,
-                fontWeight: bidderIndex === index ? "bold" : null
-              }}
-            >
-              {playerLastBid === undefined
+
+            <g key={index} {...{
+              height: "100",
+              width: `${100 * 18/23}`,
+              transform: `translate(${100 * 9/23},50) rotate(${72 * offset - 134}, 100, 100) rotate(-215,${100 * 9/23},50)`
+            }}>
+              <text y="100">
+                {playerLastBid === undefined
                 ? null
                 : playerLastBid === "P"
                 ? "I pass"
                 : playerLastBid === "Y"
                 ? `I bid 2 and ${bidPoints} points.`
                 : `I bid ${rankOrder[playerLastBid]}`}
-            </span>
+              </text>
+            </g>
           );
         })}
-      </div>
+      </svg>
     );
   }
 }

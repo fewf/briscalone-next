@@ -51,6 +51,21 @@ const GameProvider = ({ children }) => {
     }
   };
 
+  const setName = async (name) => {
+    try {
+      const res = await fetch('/api/setName', {
+        method: 'POST',
+        body: JSON.stringify({ name }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const updatedGame = await res.json();
+      if (updatedGame.err) return;
+      setGame(updatedGame);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -59,6 +74,7 @@ const GameProvider = ({ children }) => {
         playBid,
         playMonkey,
         playCard,
+        setName,
       }}
     >
       {children}

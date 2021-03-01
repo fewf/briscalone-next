@@ -1,5 +1,6 @@
 import { getMinifiedRecord, table } from './api/utils/airtable';
 import { useEffect, useContext } from 'react';
+import range from 'lodash/range';
 import { GameContext } from '../contexts/GameContext';
 import auth0 from './api/utils/auth0';
 import { generateGame } from '../game/GameEngine';
@@ -13,7 +14,7 @@ import GameInfo from "../components/GameInfo";
 // import useInterval from '@use-it/interval';
 
 export default function Home({ initialGame, user }) {
-  const { game, setGame, playCard, playBid, playMonkey } = useContext(GameContext);
+  const { game, setGame, playCard, playBid, playMonkey, setName } = useContext(GameContext);
   useEffect(() => {
     // let interval;
     // if (window) {
@@ -51,24 +52,30 @@ export default function Home({ initialGame, user }) {
     return null;
   }
   console.log(game);
-  const users = [game.fields.user1Id, game.fields.user2Id, game.fields.user3Id, game.fields.user4Id, game.fields.user5Id];
+  const users = range(5).map(n => game.fields[`user${n+1}Id`] && ({
+    id: game.fields[`user${n+1}Id`],
+    name: game.fields[`user${n+1}Name`] || game.fields[`user${n+1}AuthName`],
+  }))
+
   console.log(users)
   if (users.filter(x => !x).length) {
     return (
       <div style={{ position: "relative" }}>
-        <h1>Hi {user.sub}, we're waiting for more players</h1>
+        <h1>Hi {user.name || user.sub}, we're waiting for more players</h1>
       </div>
     );
   }
   const brisca = generateGame(JSON.parse(game.fields.gameJson));
-  const seatIndex = users.indexOf(user.sub);
+  const seatIndex = users.findIndex(u => u.id === user.sub);
   const round = brisca.loadRound();
   return (
-    <div className="grid grid-cols-2 grid-rows-8 md:grid-cols-12 md:grid-rows-6 h-screen">
+    <div className="grid grid-cols-2 grid-rows-9 md:grid-cols-12 md:grid-rows-6 h-screen">
       <>
         {round.playerHands &&
           round.playerHands.map((playerHand, handIndex) => (
             <Player
+              roundFirstPlayerIndex={round.roundFirstPlayerIndex}
+              bidActions={round.bidActions}
               bidderIndex={round.bidderIndex}
               bidIsFinal={round.bidIsFinal}
               bidPoints={round.bidPoints}
@@ -84,11 +91,12 @@ export default function Home({ initialGame, user }) {
               playBid={playBid}
               playMonkey={playMonkey}
               playCard={playCard}
+              setName={setName}
             />
           ))}
       </>
       <Table seatIndex={seatIndex} bidderIndex={round.bidderIndex}>
-        {round.bidIsFinal ? (
+        {round.bidIsFinal &&
           <Trick
             bidderIndex={round.bidderIndex}
             bidPoints={round.bidPoints}
@@ -96,15 +104,7 @@ export default function Home({ initialGame, user }) {
             trickFirstPlayerIndex={round.trickFirstPlayerIndex}
             seatIndex={seatIndex}
           />
-        ) : (
-          <Bids
-            bidActions={round.bidActions}
-            bidderIndex={round.bidderIndex}
-            bidPoints={round.bidPoints}
-            roundFirstPlayerIndex={round.roundFirstPlayerIndex}
-            seatIndex={seatIndex}
-          />
-        )}
+        }
       </Table>
       <GameInfo
         bidIsFinal={round.bidIsFinal}
@@ -112,6 +112,8 @@ export default function Home({ initialGame, user }) {
         monkeySuit={round.monkeySuit}
         roundNumber={brisca.rounds.length}
         round={round}
+        users={users}
+        lastRound={brisca.rounds.length > 1 && brisca.loadRound(brisca.rounds[brisca.rounds.length - 2])}
       />
       <Score
         gameScore={brisca.gameScore}
@@ -140,7 +142,12 @@ export async function getServerSideProps(context) {
           if (!gameToJoin.fields[`user${index}Id`]) {
             game = (await table.update([{
               id: gameToJoin.id,
-              fields: { ...gameToJoin.fields, [`user${index}Id`]: session.user.sub }
+              fields: {
+                ...gameToJoin.fields,
+                [`user${index}Id`]: session.user.sub,
+                [`user${index}AuthName`]: session.user.name,
+                [`user${index}Name`]: session.user.name || `Player ${index}}`,
+              }
             }]))[0];
             break;
           }
@@ -151,7 +158,9 @@ export async function getServerSideProps(context) {
         game = await table.create([{
           fields: {
             gameJson: JSON.stringify(brisca.rounds),
-            user1Id: session.user.sub
+            user1Id: session.user.sub,
+            user1AuthName: session.user.name,
+            user1Name: session.user.name || 'Player 1',
           }
         },])[0];
       }
