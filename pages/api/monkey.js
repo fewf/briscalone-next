@@ -6,15 +6,10 @@ import { generateGame } from '../../game/GameEngine';
 export default auth0.requireAuthentication(async (req, res) => {
   const { user } = await auth0.getSession(req);
   const monkey = Number(req.body.monkey);
-  if (!monkey) {
-    res.statusCode = 400;
-    res.json({ err: 'No monkey sent' });
-    return;
-  }
   if (monkey < 0 || monkey > 3) {
     console.log(monkey)
     res.statusCode = 400;
-    res.json({ err: 'Bad monkey' });
+    res.json({ err: `Bad monkey: ${monkey}` });
     return;
   }
   try {

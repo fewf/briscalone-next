@@ -6,9 +6,9 @@ import { generateGame } from '../../game/GameEngine';
 export default auth0.requireAuthentication(async (req, res) => {
   const { user } = await auth0.getSession(req);
   const { bid } = req.body;
-  if (!bid) {
+  if (bid < 0 || bid > 9) {
     res.statusCode = 400;
-    res.json({ err: 'No bid sent' });
+    res.json({ err: `Bad bid: ${bid}` });
     return;
   }
   try {

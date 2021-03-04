@@ -6,9 +6,9 @@ import { generateGame } from '../../game/GameEngine';
 export default auth0.requireAuthentication(async (req, res) => {
   const { user } = await auth0.getSession(req);
   const { card } = req.body;
-  if (!card) {
+  if (card < 0 || card > 39) {
     res.statusCode = 400;
-    res.json({ err: 'No card sent' });
+    res.json({ err: `Bad card: ${card}` });
     return;
   }
   try {
