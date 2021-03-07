@@ -211,7 +211,7 @@ const NameForm = ({playerName, setNameOnRecord}) => {
   const [name, setName] = useState(playerName);
   return (
     <form onSubmit={e => {e.preventDefault(); setNameOnRecord(name)}}>
-      <input type="text" value={name} onChange={e => setName(e.target.value)} />
+      <input className="w-full" type="text" value={name} onChange={e => setName(e.target.value)} />
     </form>
   );
 };
