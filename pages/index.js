@@ -14,7 +14,7 @@ import GameInfo from "../components/GameInfo";
 // import useInterval from '@use-it/interval';
 
 export default function Home({ initialGame, user }) {
-  const { game, setGame, playCard, playBid, playMonkey, setName } = useContext(GameContext);
+  const { game, setGame, playCard, playBid, playMonkey, setName, startRound } = useContext(GameContext);
   useEffect(() => {
     let interval;
     if (window) {
@@ -99,6 +99,7 @@ export default function Home({ initialGame, user }) {
           <Trick
             round={round}
             seatIndex={seatIndex}
+            startRound={startRound}
           />
         }
       </Table>

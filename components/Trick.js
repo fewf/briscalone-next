@@ -8,7 +8,6 @@ import {
   TABLE_RIGHT_OFFSETS,
   TABLE_ROTATE_OFFSETS
 } from "../constants/LAYOUT";
-import startRound from "../pages/api/startRound";
 
 class Trick extends Component {
   render() {
@@ -26,7 +25,7 @@ class Trick extends Component {
       ];
     return (
 
-      <div onClick={() => startRound()} className="col-start-1 col-end-3 row-start-2 row-end-5 md:col-start-4 md:col-end-10 md:row-start-2 md:row-end-4">
+      <div onClick={startRound} className="col-start-1 col-end-3 row-start-2 row-end-5 md:col-start-4 md:col-end-10 md:row-start-2 md:row-end-4">
         <svg style={{height: "100%"}} className="mx-auto"
           xmlns="http://www.w3.org/2000/svg">
 
