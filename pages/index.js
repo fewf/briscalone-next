@@ -2,22 +2,16 @@ import { getMinifiedRecord, table } from './api/utils/airtable';
 import { useEffect, useContext } from 'react';
 import range from 'lodash/range';
 import { GameContext } from '../contexts/GameContext';
+import Game from '../components/Game';
 import auth0 from './api/utils/auth0';
 import { generateGame } from '../game/GameEngine';
-import Table from "../components/Table";
-import Trick from "../components/Trick";
-import Player from "../components/Player";
-import Score from "../components/Score";
-import GameInfo from "../components/GameInfo";
 
 export default function Home({ initialGame, user }) {
-  const { game, setGame, playCard, playBid, playMonkey, setName, startRound } = useContext(GameContext);
+  const { game, setGame, playCard, playBid, playMonkey, setName, startRound, refreshGame } = useContext(GameContext);
   useEffect(() => {
     let interval;
     if (window) {
-      interval = setInterval(async () => {
-        setGame(await (await fetch('/api/getGame')).json());
-      }, 3000);
+      interval = setInterval(refreshGame, 3000);
     }
     setGame(initialGame);
     return () => clearInterval(interval);
@@ -55,7 +49,7 @@ export default function Home({ initialGame, user }) {
 
   if (users.filter(x => !x).length) {
     return (
-      <div style={{ position: "relative" }}>
+      <div>
         <h1>Hi {user.name || user.sub}, we're waiting for more players</h1>
       </div>
     );
@@ -64,57 +58,9 @@ export default function Home({ initialGame, user }) {
   const seatIndex = users.findIndex(u => u.id === user.sub);
   const round = brisca.loadRound();
   return (
-    <div className="grid grid-cols-2 grid-rows-9 md:grid-cols-12 md:grid-rows-6 h-screen">
-      <>
-        {round.playerHands &&
-          round.playerHands.map((playerHand, handIndex) => (
-            <Player
-              key={handIndex}
-              round={round}
-              roundFirstPlayerIndex={round.roundFirstPlayerIndex}
-              bidActions={round.bidActions}
-              bidderIndex={round.bidderIndex}
-              bidIsFinal={round.bidIsFinal}
-              bidPoints={round.bidPoints}
-              bidRank={round.bidRank}
-              handIndex={handIndex}
-              nextAction={round.nextAction}
-              playerHand={playerHand}
-              playerIndex={round.playerIndex}
-              playerTricks={round.playerTricks(handIndex)}
-              playerPointsTaken={round.playerPointsTaken(handIndex)}
-              seatIndex={seatIndex}
-              users={users}
-              playBid={playBid}
-              playMonkey={playMonkey}
-              playCard={playCard}
-              setName={setName}
-            />
-          ))}
-      </>
-      <Table seatIndex={seatIndex} bidderIndex={round.bidderIndex}>
-        {!!round.trickCards.length &&
-          <Trick
-            round={round}
-            seatIndex={seatIndex}
-            startRound={startRound}
-          />
-        }
-      </Table>
-      <GameInfo
-        bidIsFinal={round.bidIsFinal}
-        bidRank={round.bidRank}
-        monkeySuit={round.monkeySuit}
-        roundNumber={brisca.rounds.length}
-        round={round}
-        users={users}
-      />
-      <Score
-        gameScore={brisca.gameScore}
-        roundScores={brisca.roundScores}
-        users={users}
-      />
-    </div>
+    <Game
+      {...{ users, brisca, seatIndex, round, setGame, playCard, playBid, playMonkey, setName, startRound, refreshGame }}
+    />
   );
 }
 

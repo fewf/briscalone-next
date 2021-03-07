@@ -5,6 +5,10 @@ const GameContext = createContext();
 const GameProvider = ({ children }) => {
   const [game, setGame] = useState(false);
 
+  const refreshGame = async () => {
+    setGame(await (await fetch('/api/getGame')).json())
+  }
+
   const playBid = async (bid) => {
     try {
       const res = await fetch('/api/bid', {
@@ -89,6 +93,7 @@ const GameProvider = ({ children }) => {
         playCard,
         setName,
         startRound,
+        refreshGame,
       }}
     >
       {children}
