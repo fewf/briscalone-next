@@ -38,11 +38,12 @@ class Trick extends Component {
               .pop();
           return (
             <Card
+              key={playerCard}
               card={playerCard}
-                svgAttrs={{
-                  height: "100",
-                  width: `${100 * 18/23}`,
-                  transform: `translate(${100 * 9/23},50) rotate(${72 * offset - 134}, 100, 100) rotate(-215,${100 * 9/23},50)`
+              svgAttrs={{
+                height: "100",
+                width: `${100 * 18/23}`,
+                transform: `translate(${100 * 9/23},50) rotate(${72 * offset - 134}, 100, 100) rotate(-215,${100 * 9/23},50)`
               }}
             />
           );})}

@@ -11,12 +11,12 @@ import {
 class Score extends Component {
   render() {
     const { gameScore, roundScores, users } = this.props;
-    const divStyle = { display: "inline-block", minWidth: "20%" };
+    const divStyle = { display: "inline-block", minWidth: "20%", width: "20%" };
     return (
       <div className="col-start-1 col-end-3 row-start-9 row-end-10 md:col-start-1 md:col-end-4 md:row-start-5 md:row-end-7">
         {range(5).map(index => (
-          <div key={index} style={divStyle}>
-            P{index + 1}
+          <div key={index} style={{...divStyle, height: 50, textOverflow: "ellipsis", overflow: "hidden"}}>
+            {users[index].name}
           </div>
         ))}
         <div>

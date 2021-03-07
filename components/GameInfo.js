@@ -3,7 +3,7 @@ import { rankOrder, suitOrder } from "../constants/CARDS";
 
 class GameInfo extends Component {
   render() {
-    const { bidIsFinal, bidRank, monkeySuit, roundNumber, round, users, lastRound } = this.props;
+    const { bidIsFinal, bidRank, monkeySuit, roundNumber, round, users } = this.props;
     return (
       <div className="col-start-2 col-end-3 row-start-8 row-end-9 md:col-start-1 md:col-end-4 md:row-start-4 md:row-end-5">
         <p>
@@ -24,8 +24,8 @@ class GameInfo extends Component {
           round.isFinal ? (
             <p>
               {
-                users.filter((u, i) => lastRound.bidTeamWins ? [lastRound.bidderIndex, lastRound.partnerIndex].indexOf(i) !== -1 : [lastRound.bidderIndex, lastRound.partnerIndex].indexOf(i) === -1).map(u => u.name).join(' & ')
-              } win with {lastRound.bidTeamWins ? lastRound.bidTeamPoints : lastRound.defendTeamPoints} points!
+                users.filter((u, i) => round.bidTeamWins ? [round.bidderIndex, round.partnerIndex].indexOf(i) !== -1 : [round.bidderIndex, round.partnerIndex].indexOf(i) === -1).map(u => u.name).join(' & ')
+              } win with {round.bidTeamWins ? round.bidTeamPoints : round.defendTeamPoints} points!
             </p>
           ) : null
         }

@@ -5,13 +5,10 @@ import { GameContext } from '../contexts/GameContext';
 import auth0 from './api/utils/auth0';
 import { generateGame } from '../game/GameEngine';
 import Table from "../components/Table";
-import Bids from "../components/Bids";
 import Trick from "../components/Trick";
 import Player from "../components/Player";
 import Score from "../components/Score";
 import GameInfo from "../components/GameInfo";
-// import { getUserGame } from './api/getGame';
-// import useInterval from '@use-it/interval';
 
 export default function Home({ initialGame, user }) {
   const { game, setGame, playCard, playBid, playMonkey, setName, startRound } = useContext(GameContext);
@@ -66,13 +63,14 @@ export default function Home({ initialGame, user }) {
   const brisca = generateGame(JSON.parse(game.fields.gameJson));
   const seatIndex = users.findIndex(u => u.id === user.sub);
   const round = brisca.loadRound();
-  const lastRound = brisca.rounds.length > 1 && brisca.loadRound(brisca.rounds[brisca.rounds.length - 2]);
   return (
     <div className="grid grid-cols-2 grid-rows-9 md:grid-cols-12 md:grid-rows-6 h-screen">
       <>
         {round.playerHands &&
           round.playerHands.map((playerHand, handIndex) => (
             <Player
+              key={handIndex}
+              round={round}
               roundFirstPlayerIndex={round.roundFirstPlayerIndex}
               bidActions={round.bidActions}
               bidderIndex={round.bidderIndex}
@@ -95,7 +93,7 @@ export default function Home({ initialGame, user }) {
           ))}
       </>
       <Table seatIndex={seatIndex} bidderIndex={round.bidderIndex}>
-        {round.trickCards.length &&
+        {!!round.trickCards.length &&
           <Trick
             round={round}
             seatIndex={seatIndex}
@@ -110,7 +108,6 @@ export default function Home({ initialGame, user }) {
         roundNumber={brisca.rounds.length}
         round={round}
         users={users}
-        lastRound={lastRound}
       />
       <Score
         gameScore={brisca.gameScore}

@@ -1,12 +1,14 @@
 import React, { Component, useState } from "react";
 import sortBy from "lodash/sortBy";
+import flatten from "lodash/flatten";
 import random from "lodash/random";
 import Card from "./Card";
 import { rankOrder, suitOrder } from "../constants/CARDS";
-import { getRank, getSuit } from "../game/cardUtils";
+import { getPoints, getRank, getSuit } from "../game/cardUtils";
 
 const Player = props => {
   const {
+    round,
     bidActions,
     bidderIndex,
     bidIsFinal,
@@ -32,7 +34,6 @@ const Player = props => {
   const isTopPlayer = offset === 2 || offset === 3;
   const isMiddlePlayer = !isTopPlayer && !isSeatedPlayer;
   const playerName = users[handIndex].name || `Player ${handIndex + 1}`;
-  const [name, setName] = useState(playerName);
   const [selectedCard, setSelectedCard] = useState(null);
 
   const playerLastBid = bidActions
@@ -48,15 +49,12 @@ const Player = props => {
         'col-start-2 col-end-3 row-start-6 row-end-7 md:col-start-10 md:col-end-13 md:row-start-3 md:row-end-4',
       ][offset]} ${
         [3,4].indexOf(offset) !== -1 ? 'text-right md:text-left' : ''
-      }`}>
-        <div className={`${isCurrentPlayer ? " rounded-lg border-2 border-green p-2" :''}`}>
-
+      } p-2`}>
+        <div className={`${isCurrentPlayer ? "rounded-lg border-2 border-green-800 p-2" :''}`}>
           {
             isSeatedPlayer ? (
-              <form onSubmit={e => {e.preventDefault(); setNameOnRecord(name)}}>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} />
-              </form>
-            ) : <p>{name}</p>
+              <NameForm playerName={playerName} setNameOnRecord={setNameOnRecord} />
+            ) : <p>{playerName}</p>
           }
         </div>
         <p>
@@ -65,7 +63,19 @@ const Player = props => {
           ) : null}
         </p>
         <div>
-          {playerTricks.map((_, index) => <TakenTrick key={index} />)}
+          {
+            !round.isFinal
+            ? playerTricks.map((_, index) => <TakenTrick key={index} />)
+            : <>
+                <p>Points taken: {playerPointsTaken}</p>
+                {flatten(playerTricks).filter(card => getPoints(card)).map(card => <Card
+                  key={card}
+                  style={{ width: "12%"}}
+                  card={card}
+                  className="handCard inline-block"/>
+                )}
+              </>
+          }
         </div>
       </div>
       {isSeatedPlayer ? (
@@ -134,7 +144,7 @@ const Player = props => {
         </div>
       ) : null}
       {
-        !bidIsFinal && typeof playerLastBid === "number" && (
+        !bidIsFinal && ["number", "string"].indexOf(typeof playerLastBid) !== -1 && (
           <div className={`p-8 ${[
             'col-start-1 col-end-3 row-start-4 row-end-5 md:col-start-6 md:col-end-8 md:row-start-3 md:row-end-4',
             'col-start-1 col-end-2 row-start-3 row-end-4 md:col-start-4 md:col-end-6 md:row-start-3 md:row-end-4',
@@ -144,7 +154,7 @@ const Player = props => {
           ][offset]}`}>
             <p className={`${isSeatedPlayer && 'w-1/2 mx-auto'} rounded-lg border-2 border-black p-2`}>
 
-              {isSeatedPlayer ? "You say" : `${name} says`} "{playerLastBid === undefined
+              {isSeatedPlayer ? "You say" : `${playerName} says`} "{playerLastBid === undefined
                 ? null
                 : playerLastBid === "P"
                 ? "I pass"
@@ -196,5 +206,14 @@ const TakenTrick = () => {
     </svg>
   );
 }
+
+const NameForm = ({playerName, setNameOnRecord}) => {
+  const [name, setName] = useState(playerName);
+  return (
+    <form onSubmit={e => {e.preventDefault(); setNameOnRecord(name)}}>
+      <input type="text" value={name} onChange={e => setName(e.target.value)} />
+    </form>
+  );
+};
 
 export default Player;
