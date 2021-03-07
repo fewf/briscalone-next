@@ -1,5 +1,6 @@
 import React, { Component, useState } from "react";
 import sortBy from "lodash/sortBy";
+import random from "lodash/random";
 import Card from "./Card";
 import { rankOrder, suitOrder } from "../constants/CARDS";
 import { getRank, getSuit } from "../game/cardUtils";
@@ -45,22 +46,27 @@ const Player = props => {
         'col-start-1 col-end-2 row-start-1 row-end-2 md:col-start-4 md:col-end-7 md:row-start-1 md:row-end-2',
         'col-start-2 col-end-3 row-start-1 row-end-2 md:col-start-7 md:col-end-10 md:row-start-1 md:row-end-2',
         'col-start-2 col-end-3 row-start-6 row-end-7 md:col-start-10 md:col-end-13 md:row-start-3 md:row-end-4',
-      ][offset]} ${[3,4].indexOf(offset) !== -1 && 'text-right md:text-left'}`}>
-        {
-          isSeatedPlayer ? (
-            <form onSubmit={e => {e.preventDefault(); setNameOnRecord(name)}}>
-              <input type="text" value={name} onChange={e => setName(e.target.value)} />
-            </form>
-          ) : <p>{name}</p>
-        }
+      ][offset]} ${
+        [3,4].indexOf(offset) !== -1 ? 'text-right md:text-left' : ''
+      }`}>
+        <div className={`${isCurrentPlayer ? " rounded-lg border-2 border-green p-2" :''}`}>
+
+          {
+            isSeatedPlayer ? (
+              <form onSubmit={e => {e.preventDefault(); setNameOnRecord(name)}}>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} />
+              </form>
+            ) : <p>{name}</p>
+          }
+        </div>
         <p>
           {handIndex === bidderIndex ? (
             <span style={{ fontWeight: "bold" }}> • {bidIsFinal ? "bid winner" : "highest bid"}</span>
           ) : null}
         </p>
-        <p>
-          TRICKS: {playerTricks.length} • POINTS: {playerPointsTaken}
-        </p>
+        <div>
+          {playerTricks.map((_, index) => <TakenTrick key={index} />)}
+        </div>
       </div>
       {isSeatedPlayer ? (
         <div className="col-start-1 col-end-3 row-start-7 row-end-8  md:col-start-7 md:col-end-13 md:row-start-4 md:row-end-7">
@@ -128,7 +134,7 @@ const Player = props => {
         </div>
       ) : null}
       {
-        !bidIsFinal && playerLastBid && (
+        !bidIsFinal && typeof playerLastBid === "number" && (
           <div className={`p-8 ${[
             'col-start-1 col-end-3 row-start-4 row-end-5 md:col-start-6 md:col-end-8 md:row-start-3 md:row-end-4',
             'col-start-1 col-end-2 row-start-3 row-end-4 md:col-start-4 md:col-end-6 md:row-start-3 md:row-end-4',
@@ -150,6 +156,44 @@ const Player = props => {
         )
       }
     </>
+  );
+}
+
+const TakenTrick = () => {
+  const [ rotate1 ] = useState(random(0, 360));
+  const [ rotate2 ] = useState(random(0, 360));
+  const [ rotate3 ] = useState(random(0, 360));
+  const [ rotate4 ] = useState(random(0, 360));
+  const [ rotate5 ] = useState(random(0, 360));
+  return (
+    <svg className="inline-block mr-2" style={{height: 30, width: 30}}  viewBox="-25 -25 125 125"
+          xmlns="http://www.w3.org/2000/svg">
+      <image href="https://www.random.org/playing-cards/b1fv.png" {...{
+        height: "100",
+        width: `${100 * 18/23}`,
+        transform: `rotate(${rotate1},${100 * 9/23},50)`}}
+      />
+      <image href="https://www.random.org/playing-cards/b1fv.png" {...{
+        height: "100",
+        width: `${100 * 18/23}`,
+        transform: `rotate(${rotate2},${100 * 9/23},50)`}}
+      />
+      <image href="https://www.random.org/playing-cards/b1fv.png" {...{
+        height: "100",
+        width: `${100 * 18/23}`,
+        transform: `rotate(${rotate3},${100 * 9/23},50)`}}
+      />
+      <image href="https://www.random.org/playing-cards/b1fv.png" {...{
+        height: "100",
+        width: `${100 * 18/23}`,
+        transform: `rotate(${rotate4},${100 * 9/23},50)`}}
+      />
+      <image href="https://www.random.org/playing-cards/b1fv.png" {...{
+        height: "100",
+        width: `${100 * 18/23}`,
+        transform: `rotate(${rotate5},${100 * 9/23},50)`}}
+      />
+    </svg>
   );
 }
 

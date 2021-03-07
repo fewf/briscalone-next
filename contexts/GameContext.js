@@ -66,6 +66,19 @@ const GameProvider = ({ children }) => {
     }
   };
 
+  const startRound = async () => {
+    try {
+      const res = await fetch('/api/startRound', {
+        method: 'POST',
+      });
+      const updatedGame = await res.json();
+      if (updatedGame.err) return;
+      setGame(updatedGame);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -75,6 +88,7 @@ const GameProvider = ({ children }) => {
         playMonkey,
         playCard,
         setName,
+        startRound,
       }}
     >
       {children}

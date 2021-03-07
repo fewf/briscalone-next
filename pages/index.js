@@ -51,13 +51,11 @@ export default function Home({ initialGame, user }) {
   if (!game) {
     return null;
   }
-  console.log(game);
   const users = range(5).map(n => game.fields[`user${n+1}Id`] && ({
     id: game.fields[`user${n+1}Id`],
     name: game.fields[`user${n+1}Name`] || game.fields[`user${n+1}AuthName`],
   }))
 
-  console.log(users)
   if (users.filter(x => !x).length) {
     return (
       <div style={{ position: "relative" }}>
@@ -68,6 +66,7 @@ export default function Home({ initialGame, user }) {
   const brisca = generateGame(JSON.parse(game.fields.gameJson));
   const seatIndex = users.findIndex(u => u.id === user.sub);
   const round = brisca.loadRound();
+  const lastRound = brisca.rounds.length > 1 && brisca.loadRound(brisca.rounds[brisca.rounds.length - 2]);
   return (
     <div className="grid grid-cols-2 grid-rows-9 md:grid-cols-12 md:grid-rows-6 h-screen">
       <>
@@ -96,12 +95,9 @@ export default function Home({ initialGame, user }) {
           ))}
       </>
       <Table seatIndex={seatIndex} bidderIndex={round.bidderIndex}>
-        {round.bidIsFinal &&
+        {round.trickCards.length &&
           <Trick
-            bidderIndex={round.bidderIndex}
-            bidPoints={round.bidPoints}
-            trick={!round.trickCards.length || round.trick.length ? round.trick : round.previousTrick}
-            trickFirstPlayerIndex={round.trickFirstPlayerIndex}
+            round={round}
             seatIndex={seatIndex}
           />
         }
@@ -113,7 +109,7 @@ export default function Home({ initialGame, user }) {
         roundNumber={brisca.rounds.length}
         round={round}
         users={users}
-        lastRound={brisca.rounds.length > 1 && brisca.loadRound(brisca.rounds[brisca.rounds.length - 2])}
+        lastRound={lastRound}
       />
       <Score
         gameScore={brisca.gameScore}

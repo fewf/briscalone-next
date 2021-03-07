@@ -262,8 +262,8 @@ export const generateGame = (rounds = []) => ({
   get roundScores() {
     return this.rounds.map(roundData => {
       const round = this.loadRound(roundData);
-      return round.roundScore;
-    });
+      return round.isFinal && round.roundScore;
+    }).filter(x => x);
   },
 
   get gameScore() {
