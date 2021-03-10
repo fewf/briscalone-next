@@ -26,9 +26,9 @@ class Trick extends Component {
     return (
 
       <div onClick={startRound} className="col-start-1 col-end-3 row-start-2 row-end-5 md:col-start-4 md:col-end-10 md:row-start-2 md:row-end-4">
-        <svg style={{height: "100%"}} className="mx-auto"
+        <svg className="mx-auto" height="300" width="300"
           xmlns="http://www.w3.org/2000/svg">
-
+          <circle r="140" cx="150" cy="150" fill="darkgreen" stroke="brown" strokeWidth="5" />
         {range(5).map(index => {
           const offset = (index + 5 - seatIndex) % 5;
           const playerCard =
