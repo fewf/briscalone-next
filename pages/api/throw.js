@@ -36,10 +36,6 @@ export default auth0.requireAuthentication(async (req, res) => {
       return;
     }
     console.log(`${seatIndex + 1} threw ${card}`)
-    if (updatedRound.isFinal) {
-      console.log('new round initialized')
-      brisca.initializeRound();
-    }
     const updatedGame = (await table.update([{
       id: game.id,
       fields: { ...game.fields, gameJson: JSON.stringify(brisca.rounds)}
