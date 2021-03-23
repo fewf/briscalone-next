@@ -36,9 +36,11 @@ const Player = props => {
   const playerName = users[handIndex].name || `Player ${handIndex + 1}`;
   const [selectedCard, setSelectedCard] = useState(null);
 
-  const playerLastBid = bidActions
+  const [playerLastBid, bidIndex] = bidActions
+    .map((ba, i) => [ba, i])
     .filter((ba, i) => (i + roundFirstPlayerIndex) % 5 === handIndex)
     .pop();
+
   return (
     <>
       <div className={`${[
@@ -159,7 +161,7 @@ const Player = props => {
                 : playerLastBid === "P"
                 ? "I pass"
                 : playerLastBid === "Y"
-                ? `I bid 2 and ${bidPoints} points.`
+                ? `I bid 2 and ${bidPoints - bidActions.slice(bidIndex + 1).filter(ba => ba === 'Y').length * 2} points.`
                 : `I bid ${rankOrder[playerLastBid]}`}"
             </p>
           </div>
