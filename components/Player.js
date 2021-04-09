@@ -38,13 +38,17 @@ const Player = props => {
   const [passForever, setPassForever] = useState(false);
 
   useEffect(() => {
-    if(passForever && !bidIsFinal && isCurrentPlayer && isCurrentPlayer) {
+    if(passForever && !bidIsFinal && isCurrentPlayer && isSeatedPlayer) {
       playBid('P')
     }
-  }, [isCurrentPlayer && isSeatedPlayer])
+  }, [isCurrentPlayer, isSeatedPlayer, passForever, bidIsFinal])
 
   useEffect(() => {
-    setPassForever(false)
+    // this kinda dumbly sets passForever 5 times (1x for each player)
+    // TODO: render player controls outside of this component
+    if (bidIsFinal) {
+      setPassForever(false)
+    }
   }, [bidIsFinal])
   const playerLastBid = bidActions
     .filter((ba, i) => (i + roundFirstPlayerIndex) % 5 === handIndex)
@@ -105,18 +109,18 @@ const Player = props => {
 
           {isSeatedPlayer && !bidIsFinal ? (
 
-<button
-className="btn btn-blue"
-onClick={() => {
-  setPassForever(!passForever);
-  if (!passForever && isCurrentPlayer) {
-    playBid('P');
-  }
-}}
->
-{passForever ? "Unpass" : "Pass"} Forever
-          </button> ) :null}
-          {!isSeatedPlayer || !isCurrentPlayer ? null : !bidIsFinal ? (
+            <button
+              className="btn btn-blue"
+              onClick={() => {
+                setPassForever(!passForever);
+                if (!passForever && isCurrentPlayer) {
+                  playBid('P');
+                }
+              }}
+            >
+              {passForever ? "☑️" : "⬜"} Pass Forever
+            </button> ) :null}
+          {!isSeatedPlayer || !isCurrentPlayer || pass ? null : !bidIsFinal ? (
             <>
               <button
                 className="btn btn-blue"
