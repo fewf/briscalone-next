@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import sortBy from "lodash/sortBy";
 import flatten from "lodash/flatten";
 import random from "lodash/random";
@@ -35,14 +35,28 @@ const Player = props => {
   const isMiddlePlayer = !isTopPlayer && !isSeatedPlayer;
   const playerName = users[handIndex].name || `Player ${handIndex + 1}`;
   const [selectedCard, setSelectedCard] = useState(null);
+  const [passForever, setPassForever] = useState(false);
 
+  useEffect(() => {
+    if(passForever && !bidIsFinal && isCurrentPlayer && isSeatedPlayer) {
+      playBid('P')
+    }
+  }, [isCurrentPlayer, isSeatedPlayer, passForever, bidIsFinal])
+
+  useEffect(() => {
+    // this kinda dumbly sets passForever 5 times (1x for each player)
+    // TODO: render player controls outside of this component
+    if (bidIsFinal) {
+      setPassForever(false)
+    }
+  }, [bidIsFinal])
   const playerLastBid = bidActions
     .filter((ba, i) => (i + roundFirstPlayerIndex) % 5 === handIndex)
     .pop();
   return (
     <>
       <div className={`${[
-        'col-start-1 col-end-2 row-start-8 row-end-9 md:col-start-4 md:col-end-7 md:row-start-4 md:row-end-7',
+        'col-start-1 col-end-2 row-start-8 row-end-9 md:col-start-4 md:col-end-7 md:row-start-5 md:row-end-7',
         'col-start-1 col-end-2 row-start-6 row-end-7 md:col-start-1 md:col-end-4 md:row-start-3 md:row-end-4',
         'col-start-1 col-end-2 row-start-1 row-end-2 md:col-start-4 md:col-end-7 md:row-start-1 md:row-end-2',
         'col-start-2 col-end-3 row-start-1 row-end-2 md:col-start-7 md:col-end-10 md:row-start-1 md:row-end-2',
@@ -79,7 +93,7 @@ const Player = props => {
         </div>
       </div>
       {isSeatedPlayer ? (
-        <div className="col-start-1 col-end-3 row-start-7 row-end-8  md:col-start-7 md:col-end-13 md:row-start-4 md:row-end-7">
+        <div className="col-start-1 col-end-3 row-start-7 row-end-8  md:col-start-7 md:col-end-13 md:row-start-5 md:row-end-7">
           <div>
             {sortBy(playerHand, [getSuit, getRank]).map(card => (
               <Card
@@ -93,8 +107,21 @@ const Player = props => {
             ))}
           </div>
 
-          {!isSeatedPlayer || !isCurrentPlayer ? null : !bidIsFinal ? (
-            <div>
+          {isSeatedPlayer && !bidIsFinal ? (
+
+            <button
+              className="btn btn-blue"
+              onClick={() => {
+                setPassForever(!passForever);
+                if (!passForever && isCurrentPlayer) {
+                  playBid('P');
+                }
+              }}
+            >
+              {passForever ? "☑️" : "⬜"} Pass Forever
+            </button> ) :null}
+          {!isSeatedPlayer || !isCurrentPlayer || pass ? null : !bidIsFinal ? (
+            <>
               <button
                 className="btn btn-blue"
                 style={{ margin: 10, fontSize: 24 }}
@@ -125,7 +152,7 @@ const Player = props => {
                     </button>
                   ))
               )}
-            </div>
+            </>
           ) : nextAction === "monkey" ? (
             suitOrder.map((suit, i) => (
               <button
