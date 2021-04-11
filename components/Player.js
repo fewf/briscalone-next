@@ -120,7 +120,7 @@ const Player = props => {
             >
               {passForever ? "☑️" : "⬜"} Pass Forever
             </button> ) :null}
-          {!isSeatedPlayer || !isCurrentPlayer || pass ? null : !bidIsFinal ? (
+          {!isSeatedPlayer || !isCurrentPlayer || passForever ? null : !bidIsFinal ? (
             <>
               <button
                 className="btn btn-blue"
